@@ -4,7 +4,7 @@ import React, {useState, useEffect, Component} from 'react'
 import {View, Text, StyleSheet, Button, Pressable, FlatList, Platform, TextInput} from 'react-native';
 import {Card, FAB} from 'react-native-paper'
 
-function Home(props) {
+function Registration(props) {
 
     const [datavalue, setData] = useState([])
     useEffect(() => {
@@ -21,8 +21,8 @@ function Home(props) {
         {id:1, title:'First Title', body:'Enter your FirstName:'},
         {id:2, title:'Second Title', body:'Enter Your LastName:'},
         {id:3, title:'Third Title', body:'Enter Your age:'},
-        {id:3, title:'Third Title', body:'Enter Your Height:'},
-        {id:3, title:'Third Title', body:'Enter Your Weight:'}
+        {id:4, title:'Fourth Title', body:'Enter Your Height:'},
+        {id:5, title:'Fifth Title', body:'Enter Your Weight:'}
     ]
 
     const renderData = (item) => {
@@ -48,16 +48,20 @@ function Home(props) {
             headers: {
                 'Content-Type':'application/json'
             },
-           body:
-            JSON.stringify({FirstName:'FirstName', LastName:'LastName',  age:7, Height:654,  Weight:66})
+           body:JSON.stringify({FirstName:'FirstName', LastName:'LastName',  age:7, Height:654,  Weight:66})
         })
         .then(resp => resp.json())
         .then(data => {
             //console.log("receivedresponsefromGET", data)
-            props.navigation.navigate('Home')
+            props.navigation.navigate('Registration')
         })
         .catch(error => console.log("request failed",error))
     }
+
+    
+  const simpleAlert = () => {
+    alert('Registration Successful!!');
+  }
     
   return (
       <View style = {{flex:1}}>
@@ -68,19 +72,13 @@ function Home(props) {
             }}
             keyExtractor = {item => `${item.id}`}
           />
-          <FAB
-          style = {styles.fab}
-          small = {false}
-          icon = "plus"
-          theme = {{color:{accent:"green"}}}
-          onPress = {() => console.log("Pressed")}          
-          />
+         
           <Button
           style = {{margin:16}}  
           title = "Register"
           mode = "contained"
-          onPress = {() => registerDate()}
-          
+          //onPress = {() => registerDate()}
+          onPress = {simpleAlert}
           marginBottom = {100}
           marginTop = {5}
           />
@@ -131,4 +129,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Home
+export default Registration

@@ -1,7 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Home from './components/Home';
+import Registration from './components/Registration';
 import Login from './components/Login';
+import FirstPage from './components/FirstPage';
+import Dashboard from './components/Dashboard';
 import Contants from 'expo-constants';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -13,8 +15,10 @@ function App() {
   return (
     <View style={styles.container}>
       <Stack.Navigator>
-        <Stack.Screen name = "Home" component = {Home}/>
+      <Stack.Screen name = "FirstPage" component = {FirstPage}/>
+        <Stack.Screen name = "Registration" component = {Registration}/>
         <Stack.Screen name = "Login" component = {Login}/>
+        <Stack.Screen name = "Dashboard" component = {Dashboard}/>
       </Stack.Navigator>
       
 
