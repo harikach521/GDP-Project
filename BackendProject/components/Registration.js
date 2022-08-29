@@ -22,7 +22,9 @@ function Registration(props) {
         {id:2, title:'Second Title', body:'Enter Your LastName:'},
         {id:3, title:'Third Title', body:'Enter Your age:'},
         {id:4, title:'Fourth Title', body:'Enter Your Height:'},
-        {id:5, title:'Fifth Title', body:'Enter Your Weight:'}
+        {id:5, title:'Fifth Title', body:'Enter Your Weight:'},
+        {id:6, title:'Sixth Title', body:'Enter Your Email:'},
+        {id:7, title:'Seventh Title', body:'Enter Your Password:'}
     ]
 
     const renderData = (item) => {

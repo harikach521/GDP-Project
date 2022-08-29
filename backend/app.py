@@ -19,18 +19,23 @@ class Articles(db.Model):
     age = db.Column(db.Integer)
     Height = db.Column(db.Integer)
     Weight = db.Column(db.Integer)
+    Email = db.Column(db.String(100))
+    Password = db.Column(db.String(100))
 
-    def __init__(self, FirstName, LastName, age, Height, Weight):
+    def __init__(self, FirstName, LastName, age, Height, Weight, Email, Password):
         self.FirstName = FirstName
         self.LastName = LastName
         self.age = age
         self.Height = Height
         self.Weight = Weight
+        self.Email = Email
+        self.Password = Password
 
 
 class ArticleSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'FirstName', 'LastName', 'age', 'Height', 'Weight')
+        fields = ('id', 'FirstName', 'LastName', 'age',
+                  'Height', 'Weight', 'Email', 'Password')
 
 
 article_schema = ArticleSchema()
@@ -58,9 +63,12 @@ def add_article():
     age = request.json['age']
     Height = request.json['Height']
     Weight = request.json['Weight']
+    Email = request.json['Email']
+    Password = request.json['Password']
     # print(request)
 
-    articles = Articles(FirstName, LastName, age, Height, Weight)
+    articles = Articles(FirstName, LastName, age,
+                        Height, Weight, Email, Password)
     db.session.add(articles)
     db.session.commit()
     return article_schema.jsonify(articles)
@@ -74,12 +82,16 @@ def update_article(id):
     age = request.json['age']
     Height = request.json['Height']
     Weight = request.json['Weight']
+    Email = request.json['Email']
+    Password = request.json['Password']
 
     article.FirstName = FirstName
     article.LastName = LastName
     article.age = age
     article.Height = Height
     article.Weight = Weight
+    article.Email = Email
+    article.Password = Password
 
     db.session.commit()
     return article_schema.jsonify(article)
