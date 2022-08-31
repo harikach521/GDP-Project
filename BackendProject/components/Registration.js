@@ -24,7 +24,8 @@ function Registration(props) {
         {id:4, title:'Fourth Title', body:'Enter Your Height:'},
         {id:5, title:'Fifth Title', body:'Enter Your Weight:'},
         {id:6, title:'Sixth Title', body:'Enter Your Email:'},
-        {id:7, title:'Seventh Title', body:'Enter Your Password:'}
+        {id:7, title:'Seventh Title', body:'Enter Your Password:'},
+        {id:8, title:'Eigth Title', body:'Enter Your PhoneNumber:'}
     ]
 
     const renderData = (item) => {

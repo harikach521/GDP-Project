@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/backendsql'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
@@ -21,8 +22,9 @@ class Articles(db.Model):
     Weight = db.Column(db.Integer)
     Email = db.Column(db.String(100))
     Password = db.Column(db.String(100))
+    PhoneNumber = db.Column(db.Integer)
 
-    def __init__(self, FirstName, LastName, age, Height, Weight, Email, Password):
+    def __init__(self, FirstName, LastName, age, Height, Weight, Email, Password, PhoneNumber):
         self.FirstName = FirstName
         self.LastName = LastName
         self.age = age
@@ -30,12 +32,13 @@ class Articles(db.Model):
         self.Weight = Weight
         self.Email = Email
         self.Password = Password
+        self.PhoneNumber = PhoneNumber
 
 
 class ArticleSchema(ma.Schema):
     class Meta:
         fields = ('id', 'FirstName', 'LastName', 'age',
-                  'Height', 'Weight', 'Email', 'Password')
+                  'Height', 'Weight', 'Email', 'Password', 'PhoneNumber')
 
 
 article_schema = ArticleSchema()
@@ -65,10 +68,11 @@ def add_article():
     Weight = request.json['Weight']
     Email = request.json['Email']
     Password = request.json['Password']
+    PhoneNumber = request.json['PhoneNumber']
     # print(request)
 
     articles = Articles(FirstName, LastName, age,
-                        Height, Weight, Email, Password)
+                        Height, Weight, Email, Password, PhoneNumber)
     db.session.add(articles)
     db.session.commit()
     return article_schema.jsonify(articles)
@@ -84,6 +88,7 @@ def update_article(id):
     Weight = request.json['Weight']
     Email = request.json['Email']
     Password = request.json['Password']
+    PhoneNumber = request.json['PhoneNumber']
 
     article.FirstName = FirstName
     article.LastName = LastName
@@ -92,6 +97,7 @@ def update_article(id):
     article.Weight = Weight
     article.Email = Email
     article.Password = Password
+    article.PhoneNumber = PhoneNumber
 
     db.session.commit()
     return article_schema.jsonify(article)
