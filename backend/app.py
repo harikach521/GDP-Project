@@ -5,9 +5,10 @@ from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/backendsql'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://admin:Das#2022s@driveralertsystem.cuhoq4docfp1.us-east-1.rds.amazonaws.com/backendsql'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+print("Hello")
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)

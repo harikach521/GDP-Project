@@ -51,7 +51,7 @@ function Registration(props) {
             headers: {
                 'Content-Type':'application/json'
             },
-           body:JSON.stringify({FirstName:'FirstName', LastName:'LastName',  age:7, Height:654,  Weight:66})
+           body:JSON.stringify({FirstName:'FirstName1', LastName:'LastName1',  age:7, Height:654,  Weight:66})
         })
         .then(resp => resp.json())
         .then(data => {
@@ -81,7 +81,7 @@ function Registration(props) {
           title = "Register"
           mode = "contained"
           //onPress = {() => registerDate()}
-          onPress = {simpleAlert}
+          onPress = {registerDate()}
           marginBottom = {100}
           marginTop = {5}
           />
