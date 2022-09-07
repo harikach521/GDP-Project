@@ -1,0 +1,32 @@
+About Dataset
+
+The data comprises various attributes taken from signals measured using ECG recorded for different individuals having different heart rates at the time the measurement was taken. These various features contribute to the heart rate at the given instant of time for the individual.
+
+You have been provided with a total of 7 CSV files with the names as follows:
+timedomainfeaturestrain.csv - This file contains all time domain features of heart rate for training data frequencydomainfeaturestrain.csv - This file contains all frequency domain features of heart rate for training data
+heartratenonlinearfeaturestrain.csv - This file contains all non linear features of heart rate for training data timedomainfeaturestest.csv - This file contains all time domain features of heart rate for testing data
+frequencydomainfeaturestest.csv - This file contains all frequency domain features of heart rate for testing data heartratenonlinearfeaturestest.csv - This file contains all non linear features of heart rate for testing data
+sample_submission.csv - This file contains the format in which you need to make submissions to the portal
+
+Following is the data dictionary for the features you will come across in the files mentioned:
+
+MEANRR - Mean of RR intervals MEDIANRR - Median of RR intervals
+SDRR - Standard deviation of RR intervals
+RMSSD - Root mean square of successive RR interval differences
+SDSD - Standard deviation of successive RR interval differences
+SDRRRMSSD - Ratio of SDRR / RMSSD pNN25 - Percentage of successive RR intervals that differ by more than 25 ms pNN50 - Percentage of successive RR intervals that differ by more than 50 ms KURT - Kurtosis of distribution of successive RR intervals SKEW - Skew of distribution of successive RR intervals MEANRELRR - Mean of relative RR intervals MEDIANRELRR - Median of relative RR intervals SDRRRELRR - Standard deviation of relative RR intervals RMSSDRELRR - Root mean square of successive relative RR interval differences SDSDRELRR - Standard deviation of successive relative RR interval differences SDRRRMSSDRELRR - Ratio of SDRR/RMSSD for relative RR interval differences
+KURTRELRR - Kurtosis of distribution of relative RR intervals
+SKEWRELRR - Skewness of distribution of relative RR intervals
+uuid - Unique ID for each patient
+VLF - Absolute power of the very low frequency band (0.0033 - 0.04 Hz)
+VLFPCT - Principal component transform of VLF LF - Absolute power of the low frequency band (0.04 - 0.15 Hz) LFPCT - Principal component transform of LF
+LFNU - Absolute power of the low frequency band in normal units HF - Absolute power of the high frequency band (0.15 - 0.4 Hz) HFPCT - Principal component transform of HF
+HFNU - Absolute power of the highest frequency band in normal units TP - Total power of RR intervals LFHF - Ratio of LF to HF
+HF_LF - Ratio of HF to LF
+SD1 - Poincaré plot standard deviation perpendicular to the line of identity
+SD2 - Poincaré plot standard deviation along the line of identity
+Sampen - sample entropy which measures the regularity and complexity of a time series
+higuci - higuci fractal dimension of heartrate
+datasetId - ID of the whole dataset
+condition - condition of the patient at the time the data was recorded
+HR - Heart rate of the patient at the time of data recorded
