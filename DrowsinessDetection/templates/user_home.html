@@ -1,0 +1,35 @@
+{%include "uheader.html" %}
+<br>
+ <h2>Welcome User : {{ session['uid'] }}</h4>
+<br>
+<br>
+ <h4><a href="/faceDetection">Please Click here for activating face Detection!!!!</a></h4>
+<br>
+<br>
+ <h4><a href="{{ url_for('user') }}">Please Click here for activating lane Detection!!!!</a></h4>
+<br>
+<br>
+ <h4><a href="{{ url_for('user') }}">Please Click here for activating pulse Detection!!!!</a></h4>
+<br>
+
+<!--<div class="page-nav no-margin row" xmlns="http://www.w3.org/1999/html">
+    <div class="container">
+        <div class="row">
+
+            <ul>
+                <a href="">Please Click here for activating face Detection!!!!</a><br>
+            </ul>
+            
+            <ul>
+                <a href="">Please Click here for activating lane Detection!!!!</a><br>
+            </ul>
+            <ul>
+                <a href="">Please Click here for activating pulse Detection!!!!</a><br>
+            </ul>
+
+        </div>
+    </div>
+</div>-->
+<br><br>
+
+{%include "footer.html" %}
