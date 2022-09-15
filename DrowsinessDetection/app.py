@@ -83,7 +83,6 @@ def face_location():
 
     cv2.imshow('Face And Eyes Detection',image)
     cv2.waitKey(0)
-    return ""
 
 
 

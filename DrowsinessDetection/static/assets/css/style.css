@@ -1,12 +1,4 @@
-/* =======================================================================
-Template Name: Dil Hospital
-Author:  SmartEye Adminpanel
-Author URI: www.smarteyeapps.com
-Version: 1.0
-coder name:Prabin Raja
-Description: This Template is created for web template
-======================================================================= */
-/* ===================================== Import Less ================================== */
+
 @font-face {
   font-family: 'mouse-300';
   src: url("../fonts/PT_Sans-Web-Regular.ttf") format("truetype"); }
@@ -26,6 +18,18 @@ a {
   text-decoration: none;
   outline: none;
   color: #444; }
+
+.link {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+   
+}
+
+.link:-webkit-any-link {
+  color: -webkit-link;
+  cursor: pointer;
+}
 
 a:hover {
   color: #444; }
@@ -175,9 +179,17 @@ body {
     border-color: #00a8df !important;
     box-shadow: none !important; }
 
+  .required input {
+      float: right;
+  }
+  .required label::after { 
+      content: "*";
+      color:red;
+  }
+
 .btn {
   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 2px; }
+  border-radius: 16px; }
 
 .form-control:focus {
   box-shadow: none !important;
