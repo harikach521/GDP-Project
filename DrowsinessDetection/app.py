@@ -95,6 +95,10 @@ def user_register():
         pwd = request.form.get('pwd')
         mno = request.form.get('mno')
         email = request.form.get('email')
+        height = request.form.get('Height')
+        age = request.form.get('Age')
+        weight = request.form.get('Weight')
+
         database = DBConnection.getConnection()
         cursor = database.cursor()
         sql = "select count(*) from register where userid="
@@ -104,7 +108,7 @@ def user_register():
             sts = 0
         else:
             sql = "insert into register values(%s,%s,%s,%s,%s)"
-            values = (firstname, lastname, gender, dob, pwd, email, mno)
+            values = (firstname, lastname, gender, dob, pwd, email, mno,height,age,weight)
             cursor.execute(sql, values)
             database.commit()
             sts = 1
