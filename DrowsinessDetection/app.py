@@ -2,7 +2,9 @@ from flask import Flask, render_template, request, flash
 
 from flask import Response
 import csv
-
+from keras.models import load_model
+import numpy as np
+from pygame import mixer
 from flask import session
 
 import sys
@@ -26,6 +28,9 @@ def index():
 def user():
     return render_template("user.html")
 
+@app.route("/drowsy_detection")
+def drowsy_detection():
+    return render_template("drowsy_detection.html")
 
 @app.route("/admin")
 def admin():
@@ -119,6 +124,106 @@ def user_register():
         print(e)
 
     return ""
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+def gen_frames():
+
+    try:
+        count = 0
+        score = 0
+        thicc = 2
+        rpred = [99]
+        lpred = [99]
+        camera = cv2.VideoCapture(0)
+        font = cv2.FONT_HERSHEY_COMPLEX_SMALL
+        mixer.init()
+        sound = mixer.Sound('alarm.wav')
+
+        face = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
+        leye = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
+        reye = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
+        model = load_model('cnn_eyes.h5')
+        while True:
+            success, frame = camera.read()  # read the camera frame
+            height, width = frame.shape[:2]
+            # cv2.imwrite('testingimg.jpg', frame)
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face.detectMultiScale(gray, minNeighbors=5, scaleFactor=1.1, minSize=(25, 25))
+            left_eye = leye.detectMultiScale(gray)
+            right_eye = reye.detectMultiScale(gray)
+            # Detect the faces
+            # faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+            # Draw the rectangle around each face
+            for (x, y, w, h) in faces:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            if not success:
+                break
+            else:
+                for (x, y, w, h) in right_eye:
+                    r_eye = frame[y:y + h, x:x + w]
+                    count = count + 1
+                    r_eye = cv2.cvtColor(r_eye, cv2.COLOR_BGR2GRAY)
+                    r_eye = cv2.resize(r_eye, (24, 24))
+                    r_eye = r_eye / 255
+                    r_eye = r_eye.reshape(24, 24, -1)
+                    r_eye = np.expand_dims(r_eye, axis=0)
+                    rpred = model.predict_classes(r_eye)
+
+                for (x, y, w, h) in left_eye:
+                    l_eye = frame[y:y + h, x:x + w]
+                    count = count + 1
+                    l_eye = cv2.cvtColor(l_eye, cv2.COLOR_BGR2GRAY)
+                    l_eye = cv2.resize(l_eye, (24, 24))
+                    l_eye = l_eye / 255
+                    l_eye = l_eye.reshape(24, 24, -1)
+                    l_eye = np.expand_dims(l_eye, axis=0)
+                    lpred = model.predict_classes(l_eye)
+
+                if (rpred[0] == 0 and lpred[0] == 0):
+                    score = score + 1
+                    cv2.putText(frame, "eye_closed", (10, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+
+                else:
+                    score = score - 1
+                    cv2.putText(frame, "eye_open", (10, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+
+                if (score < 0):
+                    score = 0
+                cv2.putText(frame, 'Score:' + str(score), (150, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+
+                if (score > 15):
+                    # person is feeling sleepy so we beep the alarm
+
+                    try:
+                        sound.play()
+                        cv2.putText(frame, "DROWSINESS ALERT..!", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255),
+                                    2)
+
+                    except:  # isplaying = False
+                        pass
+                    if (thicc < 16):
+                        thicc = thicc + 2
+                    else:
+                        thicc = thicc - 2
+                        if (thicc < 2):
+                            thicc = 2
+                    cv2.rectangle(frame, (0, 0), (width, height), (0, 0, 255), thicc)
+                # cv2.imshow('frame', frame)
+
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame = buffer.tobytes()
+
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+
+    except Exception as e:
+        print(e)
+        tb = sys.exc_info()[2]
+        print(tb.tb_lineno)
 
 
 if __name__ == '__main__':
