@@ -145,12 +145,12 @@ def gen_frames():
         camera = cv2.VideoCapture(0)
         font = cv2.FONT_HERSHEY_COMPLEX_SMALL
         mixer.init()
-        sound = mixer.Sound('alarm.wav')
+        sound = mixer.Sound('DrowsinessDetection/alarm.wav')
 
-        face = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-        leye = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
-        reye = cv2.CascadeClassifier('haarcascade_righteye_2splits.xml')
-        model = load_model('cnn_eyes.h5')
+        face = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_frontalface_alt.xml')
+        leye = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_lefteye_2splits.xml')
+        reye = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_righteye_2splits.xml')
+        model = load_model('DrowsinessDetection/cnn_eyes.h5')
         while True:
             success, frame = camera.read()  # read the camera frame
             height, width = frame.shape[:2]
