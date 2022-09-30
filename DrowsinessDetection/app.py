@@ -96,19 +96,22 @@ def user_register():
         mno = request.form.get('mno')
         email = request.form.get('email')
         height = request.form.get('Height')
-        age = request.form.get('Age')
+        age = request.form.get('age')
         weight = request.form.get('Weight')
 
         database = DBConnection.getConnection()
         cursor = database.cursor()
-        sql = "select count(*) from register where userid="
+        sql = "select count(*) from register where Email="""
         cursor.execute(sql)
         res = cursor.fetchone()[0]
         if res > 0:
             sts = 0
         else:
-            sql = "insert into register values(%s,%s,%s,%s,%s)"
-            values = (firstname, lastname, gender, dob, pwd, email, mno,height,age,weight)
+            sql = "insert into register values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            values = (firstname, lastname, gender, dob,
+                      pwd, email, mno, height, age, weight)
+
+            print(sql)
             cursor.execute(sql, values)
             database.commit()
             sts = 1
