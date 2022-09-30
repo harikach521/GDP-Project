@@ -38,6 +38,10 @@ def drowsy_detection():
 def admin():
     return render_template("admin.html")
 
+@app.route("/forgotpassword")
+def forgotpassword():
+    return render_template("forgotpassword.html")
+
 
 @app.route("/newuser")
 def newuser():
@@ -128,6 +132,42 @@ def user_register():
 
         else:
             return render_template("register.html", msg="User Id already exists..!")
+
+    except Exception as e:
+        print(e)
+
+    return ""
+
+
+
+@app.route("/resetpwd",methods=["GET", "POST"])
+def resetpwd():
+    try:
+        sts2 = ""
+        uid = request.form.get('uid')
+        pwd1 = request.form.get('pwd1')
+        pwd2 = request.form.get('pwd2')
+
+        database1 = DBConnection.getConnection()
+        cursor = database1.cursor()
+        sql = "select count(*) from register where userid='" + \
+        uid + "' and userid='" + uid + "'"
+        cursor.execute(sql)
+        res1 = cursor.fetchone()[0]
+        if res1 > 0:
+            sql = "update register set passwrd = %s where userid = %s"
+            values = (pwd2 , uid)
+            cursor.execute(sql, values)
+            database1.commit()
+            sts2 = 1
+        else:
+            sts2 = 0
+        
+        if sts2 == 1:
+            return render_template("user.html", msg3="Password reset Successfully..! Login Here.")
+
+        else:
+         return render_template("user.html", msg4="User Id does not exist..!")
 
     except Exception as e:
         print(e)
