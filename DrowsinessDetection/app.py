@@ -28,9 +28,11 @@ def index():
 def user():
     return render_template("user.html")
 
+
 @app.route("/drowsy_detection")
 def drowsy_detection():
     return render_template("drowsy_detection.html")
+
 
 @app.route("/admin")
 def admin():
@@ -106,15 +108,15 @@ def user_register():
 
         database = DBConnection.getConnection()
         cursor = database.cursor()
-        sql = "select count(*) from register where Email="""
+        sql = "select count(*) from register where email='"+email+"'"
         cursor.execute(sql)
         res = cursor.fetchone()[0]
         if res > 0:
             sts = 0
         else:
             sql = "insert into register values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-            values = (firstname, lastname, gender, dob,
-                      pwd, email, mno, height, age, weight)
+            values = (firstname, lastname,  pwd, email, mno, gender, dob,
+                      height, weight, age)
 
             print(sql)
             cursor.execute(sql, values)
@@ -131,6 +133,7 @@ def user_register():
         print(e)
 
     return ""
+
 
 @app.route('/video_feed')
 def video_feed():
@@ -150,16 +153,20 @@ def gen_frames():
         mixer.init()
         sound = mixer.Sound('DrowsinessDetection/alarm.wav')
 
-        face = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_frontalface_alt.xml')
-        leye = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_lefteye_2splits.xml')
-        reye = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_righteye_2splits.xml')
+        face = cv2.CascadeClassifier(
+            'DrowsinessDetection/haarcascade_frontalface_alt.xml')
+        leye = cv2.CascadeClassifier(
+            'DrowsinessDetection/haarcascade_lefteye_2splits.xml')
+        reye = cv2.CascadeClassifier(
+            'DrowsinessDetection/haarcascade_righteye_2splits.xml')
         model = load_model('DrowsinessDetection/cnn_eyes.h5')
         while True:
             success, frame = camera.read()  # read the camera frame
             height, width = frame.shape[:2]
             # cv2.imwrite('testingimg.jpg', frame)
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            faces = face.detectMultiScale(gray, minNeighbors=5, scaleFactor=1.1, minSize=(25, 25))
+            faces = face.detectMultiScale(
+                gray, minNeighbors=5, scaleFactor=1.1, minSize=(25, 25))
             left_eye = leye.detectMultiScale(gray)
             right_eye = reye.detectMultiScale(gray)
             # Detect the faces
@@ -192,15 +199,18 @@ def gen_frames():
 
                 if (rpred[0] == 0 and lpred[0] == 0):
                     score = score + 1
-                    cv2.putText(frame, "eye_closed", (10, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(frame, "eye_closed", (10, height - 20),
+                                font, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
                 else:
                     score = score - 1
-                    cv2.putText(frame, "eye_open", (10, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(frame, "eye_open", (10, height - 20),
+                                font, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
                 if (score < 0):
                     score = 0
-                cv2.putText(frame, 'Score:' + str(score), (150, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+                cv2.putText(frame, 'Score:' + str(score), (150, height - 20),
+                            font, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
                 if (score > 15):
                     # person is feeling sleepy so we beep the alarm
@@ -218,7 +228,8 @@ def gen_frames():
                         thicc = thicc - 2
                         if (thicc < 2):
                             thicc = 2
-                    cv2.rectangle(frame, (0, 0), (width, height), (0, 0, 255), thicc)
+                    cv2.rectangle(frame, (0, 0), (width, height),
+                                  (0, 0, 255), thicc)
                 # cv2.imshow('frame', frame)
 
                 ret, buffer = cv2.imencode('.jpg', frame)
