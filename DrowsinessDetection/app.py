@@ -64,31 +64,6 @@ def userlogin_check():
 
     return ""
 
-
-@app.route("/faceDetection", methods=["GET", "POST"])
-def face_location():
-
-    face = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-    eye_dectector = cv2.CascadeClassifier('haarcascade_eye.xml')
-    image = cv2.imread("test.jpg")
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = face.detectMultiScale(
-        gray, minNeighbors=5, scaleFactor=1.1, minSize=(35, 35))
-    for (x, y, w, h) in faces:
-        cv2.rectangle(image, (x, y), (x + w, y + h), (100, 100, 100), 1)
-    #cv2.imshow("Face Detection",image)
-    roi_gray = gray[y:y+h, x:x+w]
-    roi_color = image[y:y+h, x:x+w]
-    # -----roi_gray is the cropped detected face in grayscale
-    # --- roi_color is the cropped detected face in color
-    eyes = eye_dectector.detectMultiScale(roi_gray)
-    for (ex, ey, ew, eh) in eyes:
-        cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh), (0, 255, 0), 2)
-
-    cv2.imshow('Face And Eyes Detection', image)
-    cv2.waitKey(0)
-
-
 @app.route("/user_register", methods=["GET", "POST"])
 def user_register():
     try:
@@ -100,19 +75,20 @@ def user_register():
         pwd = request.form.get('pwd')
         mno = request.form.get('mno')
         email = request.form.get('email')
-        height = request.form.get('Height')
-        age = request.form.get('Age')
-        weight = request.form.get('Weight')
+        height = request.form.get('height')
+        age = request.form.get('age')
+        weight = request.form.get('weight')
 
         database = DBConnection.getConnection()
         cursor = database.cursor()
-        sql = "select count(*) from register where userid="
+        sql = "select count(*) from register where email='"+email+"'"
+
         cursor.execute(sql)
         res = cursor.fetchone()[0]
         if res > 0:
             sts = 0
         else:
-            sql = "insert into register values(%s,%s,%s,%s,%s)"
+            sql = "insert into register values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
             values = (firstname, lastname, gender, dob, pwd, email, mno,height,age,weight)
             cursor.execute(sql, values)
             database.commit()
