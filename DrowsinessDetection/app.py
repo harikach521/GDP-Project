@@ -28,13 +28,19 @@ def index():
 def user():
     return render_template("user.html")
 
+
 @app.route("/drowsy_detection")
 def drowsy_detection():
     return render_template("drowsy_detection.html")
 
+
 @app.route("/admin")
 def admin():
     return render_template("admin.html")
+
+@app.route("/forgotpassword")
+def forgotpassword():
+    return render_template("forgotpassword.html")
 
 
 @app.route("/newuser")
@@ -105,6 +111,43 @@ def user_register():
 
     return ""
 
+
+
+@app.route("/resetpwd",methods=["GET", "POST"])
+def resetpwd():
+    try:
+        sts2 = ""
+        uid = request.form.get('uid')
+        pwd1 = request.form.get('pwd1')
+        pwd2 = request.form.get('pwd2')
+
+        database1 = DBConnection.getConnection()
+        cursor = database1.cursor()
+        sql = "select count(*) from register where userid='" + \
+        uid + "' and userid='" + uid + "'"
+        cursor.execute(sql)
+        res1 = cursor.fetchone()[0]
+        if res1 > 0:
+            sql = "update register set passwrd = %s where userid = %s"
+            values = (pwd2 , uid)
+            cursor.execute(sql, values)
+            database1.commit()
+            sts2 = 1
+        else:
+            sts2 = 0
+        
+        if sts2 == 1:
+            return render_template("user.html", msg3="Password reset Successfully..! Login Here.")
+
+        else:
+         return render_template("user.html", msg4="User Id does not exist..!")
+
+    except Exception as e:
+        print(e)
+
+    return ""
+
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -123,16 +166,20 @@ def gen_frames():
         mixer.init()
         sound = mixer.Sound('DrowsinessDetection/alarm.wav')
 
-        face = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_frontalface_alt.xml')
-        leye = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_lefteye_2splits.xml')
-        reye = cv2.CascadeClassifier('DrowsinessDetection/haarcascade_righteye_2splits.xml')
+        face = cv2.CascadeClassifier(
+            'DrowsinessDetection/haarcascade_frontalface_alt.xml')
+        leye = cv2.CascadeClassifier(
+            'DrowsinessDetection/haarcascade_lefteye_2splits.xml')
+        reye = cv2.CascadeClassifier(
+            'DrowsinessDetection/haarcascade_righteye_2splits.xml')
         model = load_model('DrowsinessDetection/cnn_eyes.h5')
         while True:
             success, frame = camera.read()  # read the camera frame
             height, width = frame.shape[:2]
             # cv2.imwrite('testingimg.jpg', frame)
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            faces = face.detectMultiScale(gray, minNeighbors=5, scaleFactor=1.1, minSize=(25, 25))
+            faces = face.detectMultiScale(
+                gray, minNeighbors=5, scaleFactor=1.1, minSize=(25, 25))
             left_eye = leye.detectMultiScale(gray)
             right_eye = reye.detectMultiScale(gray)
             # Detect the faces
@@ -165,15 +212,18 @@ def gen_frames():
 
                 if (rpred[0] == 0 and lpred[0] == 0):
                     score = score + 1
-                    cv2.putText(frame, "eye_closed", (10, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(frame, "eye_closed", (10, height - 20),
+                                font, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
                 else:
                     score = score - 1
-                    cv2.putText(frame, "eye_open", (10, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+                    cv2.putText(frame, "eye_open", (10, height - 20),
+                                font, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
                 if (score < 0):
                     score = 0
-                cv2.putText(frame, 'Score:' + str(score), (150, height - 20), font, 1, (255, 255, 255), 1, cv2.LINE_AA)
+                cv2.putText(frame, 'Score:' + str(score), (150, height - 20),
+                            font, 1, (255, 255, 255), 1, cv2.LINE_AA)
 
                 if (score > 15):
                     # person is feeling sleepy so we beep the alarm
@@ -191,7 +241,8 @@ def gen_frames():
                         thicc = thicc - 2
                         if (thicc < 2):
                             thicc = 2
-                    cv2.rectangle(frame, (0, 0), (width, height), (0, 0, 255), thicc)
+                    cv2.rectangle(frame, (0, 0), (width, height),
+                                  (0, 0, 255), thicc)
                 # cv2.imshow('frame', frame)
 
                 ret, buffer = cv2.imencode('.jpg', frame)
