@@ -11,6 +11,7 @@ import sys
 import os
 import io
 import cv2
+import smtplib
 
 from DBConfig import DBConnection
 
@@ -21,7 +22,7 @@ app.secret_key = "abc"
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('user.html')
 
 
 @app.route("/user")
@@ -46,7 +47,6 @@ def forgotpassword():
 @app.route("/newuser")
 def newuser():
     return render_template("register.html")
-
 
 @app.route("/userlogin_check", methods=["GET", "POST"])
 def userlogin_check():
@@ -255,7 +255,6 @@ def gen_frames():
         print(e)
         tb = sys.exc_info()[2]
         print(tb.tb_lineno)
-
 
 if __name__ == '__main__':
     app.run(host="localhost", port=1357, debug=True)
