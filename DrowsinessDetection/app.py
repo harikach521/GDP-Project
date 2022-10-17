@@ -148,6 +148,7 @@ def resetpwd():
     return ""
 
 
+
 @app.route('/video_feed')
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
@@ -255,6 +256,16 @@ def gen_frames():
         print(e)
         tb = sys.exc_info()[2]
         print(tb.tb_lineno)
+
+
+@app.route("/stopAlarm")
+def stopAlarm():
+    
+    mixer.init()
+    sound = mixer.Sound('DrowsinessDetection/alarm.wav')
+
+    sound.stop()
+    return render_template("drowsy_detection.html")
 
 if __name__ == '__main__':
     app.run(host="localhost", port=1357, debug=True)
