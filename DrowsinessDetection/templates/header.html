@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/plugins/slider/css/owl.carousel.min.css')}} ">
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/plugins/slider/css/owl.theme.default.css')}} ">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/style.css')}}" />
+    
 </head>
 
 <body>
@@ -25,32 +26,50 @@
 
                     </ul>
                 </div>
-                <div class="col-lg-5 d-none d-lg-block right-item">
-                    <ul>
-                        <li><a><i class="fab fa-github"></i></a></li>
-                        <li><a><i class="fab fa-google-plus-g"></i></a></li>
-                        <li> <a><i class="fab fa-pinterest-p"></i></a></li>
-                        <li><a><i class="fab fa-twitter"></i></a></li>
-                        <li> <a><i class="fab fa-facebook-f"></i></a></li>
-                    </ul>
-                </div>
-            </div>
-            <div  class=" ">
-
-                <div class="row header-nav">
+                <!--
+                <div class="col-lg-8 header-nav">
+                    
                     <div class="col-md-3 no-padding col-sm-12 nav-img">
-                  <img src="{{ url_for('static',filename='assets/images/logo.jpg')}}" alt="">
-                       <a data-toggle="collapse" data-target="#menu" href="#menu" ><i class="fas d-block d-md-none small-menu fa-bars"></i></a>
+                        <img src="{{ url_for('static',filename='assets/images/logo.jpg')}}" alt="">
+                         <a data-toggle="collapse" data-target="#menu" href="#menu" ><i class="fas d-block d-md-none small-menu fa-bars"></i></a>
                     </div>
-                    <div id="menu" class="col-md-9 d-none d-md-block nav-item">
+                    -->
+                    <div class="col-lg-5 d-none d-lg-block right-item">
+                        <ul>
+                            <li><a href="{{ url_for('index') }}" style="font-size: 1.3rem; color: white">Home</a></li>
+                            <!--<li><a href="{{ url_for('admin') }}" style="color:white; font-size: 1.3rem">Admin</a></li>-->
+                            <li><a href="{{ url_for('user') }}" style="color:white; font-size: 1.3rem">User</a></li>
+
+                        </ul>
+                    </div>
+               
+
+                <!--
+                
+                <div class="col-lg-5 d-none d-lg-block right-item">
+                    
+                    
                         <ul>
                             <li><a href="{{ url_for('index') }}">Home</a></li>
                                 <li><a href="{{ url_for('admin') }}">Admin</a></li>
                             <li><a href="{{ url_for('user') }}">User</a></li>
 
                         </ul>
-                    </div>
+                        
+                        <li><a><i class="fab fa-github"></i></a></li>
+                        <li><a><i class="fab fa-google-plus-g"></i></a></li>
+                        <li> <a><i class="fab fa-pinterest-p"></i></a></li>
+                        <li><a><i class="fab fa-twitter"></i></a></li>
+                        <li> <a><i class="fab fa-facebook-f"></i></a></li>
+                        
+                    
+                    
                 </div>
+            -->
+            </div>
+            <div  class=" ">
+
+               
 
         </div>
         </header>
