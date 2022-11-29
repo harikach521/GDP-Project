@@ -147,19 +147,21 @@ def resetpwd():
 
     return ""
 
-@app.route('/sendEmail')
+@app.route('/sendEmail', methods=["GET", "POST"])
 def sendEmail():
 
    
     s = smtplib.SMTP('smtp.gmail.com:587')
     s.starttls()
 
+    eid = request.form.get('eid')
     sender = 'driverdrowsinessdetection5@gmail.com'
-    receivers = ['driverdrowsinessdetection5@gmail.com']
-    s.login("driverdrowsinessdetection5@gmail.com", "yenzksnucrlgnkap")
+    receivers = [eid]
+    print(request.form.items)
+    s.login(sender, "yenzksnucrlgnkap")
 
-    message = """From: driverdrowsinessdetection5@gmail.com
-    To: dommetynagasateesh@gmail.com
+    message = """From: ${sender}
+    To: ${receivers}
     Subject: SMTP e-mail test from driver drowsiness detection
 
     We received your password change request. Please use the link below to set a new password.
