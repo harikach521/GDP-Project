@@ -6,12 +6,14 @@ from keras.models import load_model
 import numpy as np
 from pygame import mixer
 from flask import session
+import tensorflow as tf
 
 import sys
 import os
 import io
 import cv2
 import smtplib
+from email.mime.text import MIMEText
 
 from DBConfig import DBConnection
 
@@ -95,7 +97,7 @@ def user_register():
             sts = 0
         else:
             sql = "insert into register values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-            values = (firstname, lastname, gender, dob, pwd, email, mno,height,age,weight)
+            values = (firstname, lastname, pwd, email, mno, gender, dob,height,weight,age)
             cursor.execute(sql, values)
             database.commit()
             sts = 1
@@ -104,7 +106,7 @@ def user_register():
             return render_template("user.html", msg="Registered Successfully..! Login Here.")
 
         else:
-            return render_template("register.html", msg="User Id already exists..!")
+            return render_template("register.html", msg="User Id with email already exists. Please try to login or reset your password!")
 
     except Exception as e:
         print(e)
@@ -157,21 +159,27 @@ def sendEmail():
     eid = request.form.get('eid')
     sender = 'driverdrowsinessdetection5@gmail.com'
     receivers = [eid]
-    print(request.form.items)
+   
     s.login(sender, "yenzksnucrlgnkap")
 
-    message = """From: ${sender}
+    message = """From: ${sender} 
     To: ${receivers}
     Subject: SMTP e-mail test from driver drowsiness detection
-
-    We received your password change request. Please use the link below to set a new password.
-    http://localhost:1357/forgotpassword
+    We received your password change request. Please <a href ="http://localhost:1357/ChangePassword">Click here</a> to set a new password.
     """
 
-    s.sendmail(sender, receivers, message)         
+    msg = MIMEText(message ,'html')
+    s.sendmail(sender, receivers, msg.as_string())         
     print("Successfully sent email")
 
-    return ""
+    return render_template("Confirmation.html")
+
+
+
+@app.route("/ChangePassword",methods=["GET", "POST"])
+def ChangePassword():
+    return render_template("ChangePassword.html")
+
 
 @app.route('/video_feed')
 def video_feed():
@@ -181,6 +189,7 @@ def video_feed():
 def gen_frames():
 
     try:
+        
         count = 0
         score = 0
         thicc = 2
@@ -201,7 +210,7 @@ def gen_frames():
         while True:
             success, frame = camera.read()  # read the camera frame
             height, width = frame.shape[:2]
-            # cv2.imwrite('testingimg.jpg', frame)
+            
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             faces = face.detectMultiScale(
                 gray, minNeighbors=5, scaleFactor=1.1, minSize=(25, 25))
@@ -285,11 +294,7 @@ def gen_frames():
 @app.route("/stopAlarm")
 def stopAlarm():
     
-    mixer.init()
-    sound = mixer.Sound('DrowsinessDetection/alarm.wav')
-
-    sound.stop()
-    return render_template("drowsy_detection.html")
+    return render_template("user_home.html")
 
 if __name__ == '__main__':
     app.run(host="localhost", port=1357, debug=True)
